@@ -4,36 +4,46 @@
   <meta charset="UTF-8" />
   <title>Pulsera ePCR</title>
 
-  <!-- Core ePCR Layout Styles -->
+  <!-- Core Layout Styles -->
   <link rel="stylesheet" href="css/epcr.css" />
 
-  <!-- Tab Styling -->
+  <!-- Tab Components Styling -->
   <link rel="stylesheet" href="css/epcr_tabs.css" />
 
-  <!-- EPCR Engine -->
+  <!-- EPCR Engine Controller -->
   <script type="module" src="js/epcr.js" defer></script>
 </head>
 
 <body>
 
-<!-- TOP NAV -->
+<!-- ===========================================================
+     TOP NAVIGATION BAR
+=========================================================== -->
 <div class="epcr-navbar">
-  <img src="https://i.imgur.com/ogSYUG6.png" class="epcr-logo" />
+  
+  <!-- Logo -->
+  <img src="https://i.imgur.com/ogSYUG6.png" class="epcr-logo" alt="Pulsera EMS Logo" />
 
+  <!-- Patient header + autosave indicator -->
   <div class="epcr-title">
     <span id="patientName">Loading Patient…</span>
-    <span id="autosave">Saved</span>
+    <span id="autosave" class="autosave-status">Saved</span>
   </div>
 
+  <!-- Right-side icons -->
   <div class="epcr-nav-icons">
-    <img src="icons/help.svg" class="nav-icon" />
-    <img src="icons/settings.svg" class="nav-icon" />
+    <img src="icons/help.svg" class="nav-icon" alt="Help" />
+    <img src="icons/settings.svg" class="nav-icon" alt="Settings" />
     <div class="profile-badge" id="profileBadge">M</div>
   </div>
+
 </div>
 
-<!-- TAB BAR -->
+<!-- ===========================================================
+     TAB BAR
+=========================================================== -->
 <div class="epcr-tabs">
+
   <div class="tab active" data-tab="patient">Patient</div>
   <div class="tab" data-tab="incident">Incident</div>
   <div class="tab" data-tab="assessment">Assessment</div>
@@ -41,11 +51,14 @@
   <div class="tab" data-tab="medications">Medications</div>
   <div class="tab" data-tab="timeline">Timeline</div>
   <div class="tab" data-tab="signatures">Signatures</div>
+
 </div>
 
-<!-- CONTENT AREA -->
+<!-- ===========================================================
+     MAIN CONTENT AREA — tabs load here dynamically
+=========================================================== -->
 <div id="epcrContent" class="epcr-content">
-  <!-- Tab HTML injected here -->
+  <!-- Tab HTML is injected here dynamically by epcr.js -->
 </div>
 
 </body>

@@ -16,65 +16,79 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadTab("patient"); // Default tab
 });
 
-/* ============================
-   Load Patient Header
-============================ */
+/* ============================================================
+   LOAD PATIENT HEADER
+============================================================ */
 
 async function loadPatientHeader() {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("patients")
     .select("first_name, last_name")
     .eq("id", PATIENT_ID)
     .single();
 
+  if (error) {
+    console.error("Failed to load patient header:", error);
+    return;
+  }
+
   document.getElementById("patientName").textContent =
     `${data.first_name} ${data.last_name}`;
 }
 
-/* ============================
-   Load or Create EPCR Record
-============================ */
+/* ============================================================
+   LOAD OR CREATE EPCR RECORD
+============================================================ */
 
 async function loadOrCreateEpcr() {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("pcrs")
     .select("*")
     .eq("patient_id", PATIENT_ID)
     .maybeSingle();
 
+  if (error) console.warn("EPCR lookup error:", error);
+
   if (data) {
     EPCR_ID = data.id;
+    localStorage.setItem("currentEpcrId", EPCR_ID);
     return;
   }
 
-  const { data: created } = await supabase
+  // Create new PCR record
+  const { data: created, error: insertErr } = await supabase
     .from("pcrs")
     .insert({ patient_id: PATIENT_ID })
     .select()
     .single();
 
+  if (insertErr) {
+    console.error("Failed to create PCR record:", insertErr);
+    return;
+  }
+
   EPCR_ID = created.id;
   localStorage.setItem("currentEpcrId", EPCR_ID);
 }
 
-/* ============================
-   Tab System
-============================ */
+/* ============================================================
+   TAB SYSTEM
+============================================================ */
 
 function setupTabs() {
-  document.querySelectorAll(".tab").forEach(tab => {
-    tab.onclick = () => {
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
       tab.classList.add("active");
 
       loadTab(tab.dataset.tab);
-    };
+    });
   });
 }
 
-/* ============================
-   Load HTML Tab
-============================ */
+/* ============================================================
+   LOAD TAB (HTML + JS MODULE)
+============================================================ */
 
 async function loadTab(tabName) {
   const container = document.getElementById("epcrContent");
@@ -84,29 +98,31 @@ async function loadTab(tabName) {
   `;
 
   try {
-    // Fetch HTML tab file
-    const res = await fetch(`epcr_tabs/${tabName}.html`);
-    if (!res.ok) throw new Error("Tab HTML missing");
+    /* ----- Load the HTML for the tab ----- */
+    const htmlRes = await fetch(`epcr_tabs/${tabName}.html`);
+    if (!htmlRes.ok) throw new Error(`Missing HTML for tab: ${tabName}`);
 
-    const html = await res.text();
+    const html = await htmlRes.text();
     container.innerHTML = html;
 
-    // Because the HTML contains <script type="module">, execute it manually
-    const scripts = container.querySelectorAll("script[type='module']");
+    /* ----- Load the JS logic for the tab ----- */
+    const module = await import(`./epcr_tabs/${tabName}.js`);
 
-    for (let oldScript of scripts) {
-      const newScript = document.createElement("script");
-      newScript.type = "module";
-      newScript.textContent = oldScript.textContent;
-      document.body.appendChild(newScript);
-      oldScript.remove();
+    // Call loadTabData() to populate fields
+    if (module.loadTabData) {
+      await module.loadTabData(EPCR_ID);
+    }
+
+    // Enable autosave if provided
+    if (module.enableAutosave) {
+      module.enableAutosave(EPCR_ID);
     }
 
   } catch (err) {
-    console.error(err);
+    console.error(`Failed to load tab '${tabName}'`, err);
+
     container.innerHTML = `
       <div class="error">Failed to load ${tabName} tab.</div>
     `;
   }
 }
-
