@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <title>Pulsera ePCR</title>
 
-  <!-- Styles -->
+  <!-- Core ePCR Layout Styles -->
   <link rel="stylesheet" href="css/epcr.css" />
 
-  <!-- Main EPCR Engine -->
+  <!-- Tab Styling -->
+  <link rel="stylesheet" href="css/epcr_tabs.css" />
+
+  <!-- EPCR Engine -->
   <script type="module" src="js/epcr.js" defer></script>
 </head>
 
@@ -40,9 +43,9 @@
   <div class="tab" data-tab="signatures">Signatures</div>
 </div>
 
-<!-- MAIN CONTENT (DYNAMICALLY LOADED BY JS) -->
+<!-- CONTENT AREA -->
 <div id="epcrContent" class="epcr-content">
-  <!-- JS will inject all tab pages here -->
+  <!-- Tab HTML injected here -->
 </div>
 
 </body>

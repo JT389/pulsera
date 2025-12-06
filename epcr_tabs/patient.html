@@ -1,29 +1,41 @@
 <div class="tab-page active">
 
+  <!-- DEMOGRAPHICS -->
   <div class="section-card">
     <div class="section-title">Demographics</div>
 
-    <label>First Name</label>
-    <input id="firstName">
+    <div class="form-grid">
+      <div>
+        <label>First Name</label>
+        <input id="firstName" class="input-field">
+      </div>
 
-    <label>Last Name</label>
-    <input id="lastName">
+      <div>
+        <label>Last Name</label>
+        <input id="lastName" class="input-field">
+      </div>
 
-    <label>Date of Birth</label>
-    <input id="dob" type="date">
+      <div>
+        <label>Date of Birth</label>
+        <input id="dob" type="date" class="input-field">
+      </div>
 
-    <label>Gender</label>
-    <select id="gender">
-      <option value="">Select</option>
-      <option>M</option>
-      <option>F</option>
-      <option>Other</option>
-    </select>
+      <div>
+        <label>Gender</label>
+        <select id="gender" class="input-field">
+          <option value="">Select</option>
+          <option>M</option>
+          <option>F</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
   </div>
 
+  <!-- CHIEF COMPLAINT -->
   <div class="section-card">
     <div class="section-title">Chief Complaint</div>
-    <textarea id="chiefComplaint"></textarea>
+    <textarea id="chiefComplaint" class="textarea-field"></textarea>
   </div>
 
 </div>
@@ -33,7 +45,9 @@ import { supabase } from "../js/supabase.js";
 
 const EPCR_ID = localStorage.getItem("currentEpcrId");
 
-// Load EPCR Data
+/* -----------------------------------------
+   LOAD DATA
+----------------------------------------- */
 (async () => {
   const { data } = await supabase
     .from("epcr_demographics")
@@ -43,30 +57,42 @@ const EPCR_ID = localStorage.getItem("currentEpcrId");
 
   if (!data) return;
 
-  document.getElementById("firstName").value = data.first_name ?? "";
-  document.getElementById("lastName").value = data.last_name ?? "";
-  document.getElementById("dob").value = data.dob ?? "";
-  document.getElementById("gender").value = data.gender ?? "";
-  document.getElementById("chiefComplaint").value = data.chief_complaint ?? "";
+  firstName.value = data.first_name ?? "";
+  lastName.value = data.last_name ?? "";
+  dob.value = data.dob ?? "";
+  gender.value = data.gender ?? "";
+  chiefComplaint.value = data.chief_complaint ?? "";
 })();
 
-// Autosave Engine
+/* -----------------------------------------
+   AUTOSAVE ENGINE
+----------------------------------------- */
+
 const fields = ["firstName", "lastName", "dob", "gender", "chiefComplaint"];
 
 fields.forEach(id => {
-  document.getElementById(id).addEventListener("input", () => save());
+  document.getElementById(id).addEventListener("input", () => {
+    document.getElementById("autosave").textContent = "Saving…";
+    save();
+  });
 });
 
-async function save() {
-  await supabase.from("epcr_demographics").upsert({
-    epcr_id: EPCR_ID,
-    first_name: firstName.value,
-    last_name: lastName.value,
-    dob: dob.value,
-    gender: gender.value,
-    chief_complaint: chiefComplaint.value
-  });
+let saveTimer = null;
 
-  document.getElementById("autosave").textContent = "Saved";
+async function save() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+
+    await supabase.from("epcr_demographics").upsert({
+      epcr_id: EPCR_ID,
+      first_name: firstName.value,
+      last_name: lastName.value,
+      dob: dob.value,
+      gender: gender.value,
+      chief_complaint: chiefComplaint.value
+    });
+
+    document.getElementById("autosave").textContent = "Saved";
+  }, 400);
 }
 </script>

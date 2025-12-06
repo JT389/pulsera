@@ -1,0 +1,110 @@
+/* ===============================
+   EPCR TAB BAR STYLING (PULSERA)
+================================ */
+
+.epcr-tabs {
+  display: flex;
+  align-items: center;
+  background: #121212;
+  padding: 0 20px;
+  border-bottom: 1px solid #222;
+  height: 48px;
+}
+
+.tab {
+  color: #bbb;
+  padding: 10px 22px;
+  margin-right: 4px;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 4px 4px 0 0;
+  transition: 0.15s;
+}
+
+.tab:hover {
+  background: #1c1c1c;
+  color: white;
+}
+
+.tab.active {
+  background: #1f1f1f;
+  color: #4fa3ff;
+  font-weight: 600;
+  border-bottom: 2px solid #4fa3ff;
+}
+
+/* Container where tabs load */
+.epcr-content {
+  padding: 20px;
+  background: #0d0d0d;
+  min-height: calc(100vh - 110px);
+  color: white;
+}
+
+/* Loading style */
+.loading {
+  font-size: 18px;
+  opacity: 0.7;
+  padding: 20px;
+}
+
+/* Error message */
+.error {
+  color: #ff5757;
+  padding: 20px;
+  font-size: 18px;
+}
+/* SECTION CARD */
+.section-card {
+  background: #121212;
+  border: 1px solid #1f1f1f;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* TITLE */
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #4fa3ff;
+  margin-bottom: 12px;
+}
+
+/* GRID FOR DEMOGRAPHICS FORM */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+/* INPUTS */
+.input-field, .textarea-field {
+  width: 100%;
+  padding: 10px 12px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #eee;
+  font-size: 15px;
+}
+
+.input-field:focus,
+.textarea-field:focus {
+  outline: none;
+  border-color: #4fa3ff;
+}
+
+/* TEXTAREA */
+.textarea-field {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* LABELS */
+label {
+  display: block;
+  color: #ccc;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
