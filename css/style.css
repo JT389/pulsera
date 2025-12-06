@@ -1,374 +1,382 @@
-/* =============================================
-   GLOBAL VARIABLES — Pulsara Dark UI
-============================================= */
+/* ============================================================
+   GLOBAL COLORS   (Pulsera-inspired medical palette)
+============================================================ */
 
 :root {
-  --bg-dark: #0d1117;
-  --bg-panel: #161b22;
-  --bg-card: #1d232b;
-  --border-soft: #2b313a;
-  --border-hard: #3a414b;
+  --pulsera-blue: #0A84FF;
+  --pulsera-blue-dark: #0068D1;
+  --pulsera-green: #2ECC71;
+  --pulsera-yellow: #F1C40F;
+  --pulsera-red: #E74C3C;
+  --pulsera-black: #2C3E50;
+  --pulsera-gray: #f5f7fa;
+  --pulsera-border: #d8dce3;
+  --pulsera-text-dark: #2d2d2d;
+  --pulsera-text-light: #7a7a7a;
 
-  --text-primary: #e6edf3;
-  --text-secondary: #9ba4b0;
-  --text-muted: #6c7178;
+  --card-radius: 12px;
+  --card-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 
-  --pulsera-blue: #2aa7ff;
-  --pulsera-teal: #00c6c2;
-
-  /* Pulsara triage colors */
-  --triage-green: #00c853;
-  --triage-yellow: #ffd600;
-  --triage-red: #ff1744;
-  --triage-black: #000000;
-  --triage-none: #9ba4b0;
-
-  --card-radius: 6px;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Remove all margin/padding */
+/* ============================================================
+   GLOBAL RESET
+============================================================ */
+
 body {
   margin: 0;
-  padding: 0;
-  background: var(--bg-dark);
-  color: var(--text-primary);
-  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
-  overflow: hidden; /* Pulsara prevents page scroll; internal elements scroll */
+  background: #f3f5f9;
+  color: var(--pulsera-text-dark);
 }
 
-/* =============================================
-   TOP NAVBAR (Logo + Search + Icons + Profile)
-============================================= */
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border-radius: 5px;
+}
+
+/* ============================================================
+   AUTH (Login Page)
+============================================================ */
+
+.auth-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--pulsera-gray);
+}
+
+.auth-card {
+  background: white;
+  padding: 40px 50px;
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  width: 360px;
+  text-align: center;
+}
+
+.auth-logo {
+  width: 150px;
+  margin-bottom: 10px;
+}
+
+.auth-title {
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0 18px;
+  border: 1px solid var(--pulsera-border);
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.15s ease-in-out;
+}
+
+.auth-card input:focus {
+  border-color: var(--pulsera-blue);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.15);
+}
+
+.auth-error {
+  margin-top: 10px;
+  color: red;
+  font-size: 14px;
+}
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+
+.pulsera-btn-full {
+  width: 100%;
+  padding: 13px;
+  background: var(--pulsera-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
+}
+
+.pulsera-btn-full:hover {
+  background: var(--pulsera-blue-dark);
+}
+
+/* Shared mini buttons */
+.card-btn {
+  padding: 6px 12px;
+  background: #eef2f7;
+  border: 1px solid var(--pulsera-border);
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.card-btn:hover {
+  background: #e4e8ee;
+}
+
+/* ============================================================
+   TOP NAVBAR (Incident Page)
+============================================================ */
 
 .incident-navbar {
-  height: 60px;
-  background: var(--bg-panel);
-  border-bottom: 1px solid var(--border-hard);
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  gap: 18px;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: white;
+  border-bottom: 1px solid var(--pulsera-border);
 }
 
 .incident-logo {
-  height: 30px;
-  object-fit: contain;
+  height: 40px;
 }
 
-/* Search box */
 .incident-search {
-  background: #0f151c;
-  border: 1px solid var(--border-soft);
-  height: 38px;
-  padding: 0 12px;
-  border-radius: 6px;
-  color: var(--text-primary);
-  flex: 0 0 320px;
-  font-size: 0.95rem;
+  width: 350px;
+  padding: 10px;
+  border: 1px solid var(--pulsera-border);
+  border-radius: 8px;
 }
 
-/* Icon bar */
+.incident-search:focus {
+  border-color: var(--pulsera-blue);
+  outline: none;
+}
+
 .nav-icons {
-  margin-left: auto;
   display: flex;
-  gap: 20px;
+  gap: 14px;
   align-items: center;
 }
 
 .nav-icon {
   width: 22px;
-  height: 22px;
+  opacity: 0.7;
   cursor: pointer;
-  opacity: 0.8;
+  transition: 0.2s;
 }
 
 .nav-icon:hover {
   opacity: 1;
 }
 
-/* Profile circle */
 .profile-badge {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--pulsera-teal);
+  background: var(--pulsera-blue);
+  color: white;
+  width: 36px;
+  height: 36px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  color: #000;
+  align-items: center;
+  border-radius: 50%;
   font-weight: 600;
+  cursor: pointer;
 }
 
-/* =============================================
-   INCIDENT HEADER BAR
-============================================= */
+/* ============================================================
+   INCIDENT HEADER
+============================================================ */
 
 .incident-header {
-  height: 70px;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border-soft);
   display: flex;
-  align-items: center;
-  padding: 0 22px;
   justify-content: space-between;
+  padding: 20px 26px;
+  background: #fafbfd;
+  border-bottom: 1px solid var(--pulsera-border);
 }
 
 .incident-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 26px;
+  font-weight: 700;
 }
 
 .incident-subtitle {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  margin-top: 2px;
+  color: var(--pulsera-text-light);
+  margin-top: 5px;
 }
 
-.header-left {
-  display: flex;
-  flex-direction: column;
-}
-
-.header-right {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-}
-
-/* Patient Color Counters */
+/* Triage counters */
 .color-counter {
-  padding: 4px 10px;
-  font-size: 0.85rem;
-  background: var(--bg-panel);
-  border: 1px solid var(--border-soft);
-  border-radius: 6px;
   display: flex;
-  gap: 6px;
   align-items: center;
+  margin-left: 16px;
+  font-weight: 600;
 }
 
 .color-dot {
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
+  margin-right: 6px;
 }
 
-.dot-green { background: var(--triage-green); }
-.dot-yellow { background: var(--triage-yellow); }
-.dot-red { background: var(--triage-red); }
-.dot-black { background: var(--triage-black); }
-.dot-none { background: var(--triage-none); }
+.dot-green { background: var(--pulsera-green); }
+.dot-yellow { background: var(--pulsera-yellow); }
+.dot-red { background: var(--pulsera-red); }
+.dot-black { background: #444; }
+.dot-none { background: #ccc; }
 
-/* =============================================
-   LEFT FILTER SIDEBAR
-============================================= */
+/* ============================================================
+   SIDEBAR
+============================================================ */
 
 .sidebar {
-  width: 260px;
-  background: var(--bg-panel);
-  border-right: 1px solid var(--border-hard);
-  height: calc(100vh - 130px); /* minus navbar + header */
-  overflow-y: auto;
-  padding: 10px 0;
+  width: 220px;
+  background: white;
+  border-right: 1px solid var(--pulsera-border);
+  height: calc(100vh - 120px);
   position: fixed;
-  top: 130px;
+  top: 120px;
   left: 0;
+  padding: 20px;
 }
 
 .sidebar-section-title {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  padding: 16px 20px 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--pulsera-text-light);
+  margin-top: 18px;
+  margin-bottom: 6px;
 }
 
 .sidebar-option {
-  padding: 10px 20px;
+  padding: 10px;
+  border-radius: 6px;
   cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  color: var(--text-primary);
+  margin-bottom: 6px;
+  transition: 0.15s;
 }
 
 .sidebar-option:hover {
-  background: #1f2630;
+  background: #eef2f7;
 }
 
-.sidebar-option.active {
-  background: #212a34;
-  border-left: 3px solid var(--pulsera-teal);
-}
-
-/* =============================================
-   RIGHT CONTENT AREA (patient list)
-============================================= */
+/* ============================================================
+   MAIN CONTENT AREA
+============================================================ */
 
 .content-area {
-  margin-left: 260px;
-  height: calc(100vh - 130px);
-  overflow-y: auto;
-  padding: 20px 28px;
+  margin-left: 240px;
+  padding: 20px;
 }
 
-/* Sort Bar */
 .sort-bar {
   display: flex;
-  gap: 18px;
-  align-items: center;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border-soft);
+  gap: 16px;
   margin-bottom: 18px;
 }
 
 .sort-option {
+  padding: 8px 12px;
   cursor: pointer;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
+  border-radius: 6px;
+  background: #eef2f7;
+  transition: 0.15s;
 }
 
 .sort-option.active {
-  color: var(--pulsera-teal);
-  font-weight: 600;
+  background: var(--pulsera-blue);
+  color: white;
 }
 
-/* Create Patient Button */
-.create-patient-btn {
-  position: absolute;
-  top: 145px;
-  right: 28px;
-  background: var(--pulsera-teal);
-  color: #000;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-}
-
-/* =============================================
-   PATIENT CARDS (IDENTICAL TO PULSARA)
-============================================= */
+/* ============================================================
+   PATIENT CARDS
+============================================================ */
 
 .patient-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-soft);
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  background: white;
+  padding: 18px;
+  margin-bottom: 12px;
   border-radius: var(--card-radius);
-  height: 120px;
-  display: flex;
-  padding: 14px;
-  margin-bottom: 14px;
+  border: 1px solid var(--pulsera-border);
+  box-shadow: var(--card-shadow);
   cursor: pointer;
-  transition: 0.2s;
-  position: relative;
+  transition: 0.18s;
 }
 
 .patient-card:hover {
-  background: #202731;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.1);
 }
 
-/* Left color bar */
-.patient-color-bar {
-  width: 6px;
-  border-radius: 6px;
-  margin-right: 14px;
-}
-
-.bar-green { background: var(--triage-green); }
-.bar-yellow { background: var(--triage-yellow); }
-.bar-red { background: var(--triage-red); }
-.bar-black { background: var(--triage-black); }
-.bar-none { background: var(--triage-none); }
-
-/* Card content */
-.patient-main {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.patient-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* Name */
 .patient-name {
-  font-size: 1.05rem;
+  font-size: 18px;
   font-weight: 600;
 }
 
-.patient-meta {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+.patient-age-gender {
+  color: var(--pulsera-text-light);
+  margin-top: 4px;
 }
 
-/* Right-side actions */
-.patient-actions {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
+.patient-status {
+  margin-top: 6px;
+  font-size: 14px;
 }
 
-.patient-icons {
-  display: flex;
-  gap: 12px;
-  opacity: 0.8;
+.patient-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: white;
 }
 
-.patient-icons img {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
+.tag-green { background: var(--pulsera-green); }
+.tag-yellow { background: var(--pulsera-yellow); color: black; }
+.tag-red { background: var(--pulsera-red); }
+.tag-black { background: #333; }
+.tag-none { background: #999; }
+
+/* Flash animation on update */
+.flash {
+  animation: flashAnim 0.3s ease-out;
 }
 
-.patient-icons img:hover {
-  opacity: 1;
+@keyframes flashAnim {
+  0% { background: #d5e8ff; }
+  100% { background: white; }
 }
 
-.patient-timestamps {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
+/* ============================================================
+   CREATE PATIENT BUTTON
+============================================================ */
 
-/* Unread dot */
-.unread-dot {
-  width: 10px;
-  height: 10px;
+.create-patient-btn {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
   background: var(--pulsera-blue);
-  border-radius: 50%;
-  position: absolute;
-  top: 10px;
-  right: 12px;
-}
-
-/* Facility icon (green check) */
-.facility-check {
-  width: 14px;
-  height: 14px;
-  background: var(--pulsera-teal);
-  border-radius: 50%;
-  margin-right: 4px;
-}
-
-/* =============================================
-   SCROLLBARS
-============================================= */
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0f1216;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #2b313a;
+  color: white;
+  border: none;
+  padding: 16px 24px;
   border-radius: 10px;
+  font-size: 17px;
+  box-shadow: var(--card-shadow);
+  cursor: pointer;
+  transition: 0.18s;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #3c4551;
+.create-patient-btn:hover {
+  background: var(--pulsera-blue-dark);
+  transform: translateY(-2px);
 }
