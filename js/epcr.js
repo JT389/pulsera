@@ -79,20 +79,34 @@ function setupTabs() {
 async function loadTab(tabName) {
   const container = document.getElementById("epcrContent");
 
-  container.innerHTML = `<div class='loading'>Loading ${tabName}...</div>`;
+  container.innerHTML = `
+    <div class="loading">Loading ${tabName}...</div>
+  `;
 
   try {
-    const response = await fetch(`epcr_tabs/${tabName}.html`);
-    const html = await response.text();
+    // Fetch HTML tab file
+    const res = await fetch(`epcr_tabs/${tabName}.html`);
+    if (!res.ok) throw new Error("Tab HTML missing");
 
+    const html = await res.text();
     container.innerHTML = html;
 
-    // Run embedded script tag inside tab HTML
-    const script = container.querySelector("script");
-    if (script) eval(script.innerText);
+    // Because the HTML contains <script type="module">, execute it manually
+    const scripts = container.querySelectorAll("script[type='module']");
 
-  } catch (e) {
-    console.error(e);
-    container.innerHTML = `<div class='error'>Failed to load ${tabName} tab.</div>`;
+    for (let oldScript of scripts) {
+      const newScript = document.createElement("script");
+      newScript.type = "module";
+      newScript.textContent = oldScript.textContent;
+      document.body.appendChild(newScript);
+      oldScript.remove();
+    }
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = `
+      <div class="error">Failed to load ${tabName} tab.</div>
+    `;
   }
 }
+
