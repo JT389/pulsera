@@ -1,5 +1,9 @@
 import { supabase } from "./supabase.js";
 
+/* ==========================================================
+   CONFIG / GLOBALS
+========================================================== */
+
 let EPCR_ID = null;
 const PATIENT_ID = localStorage.getItem("currentPatientId");
 
@@ -13,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadOrCreateEpcr();
 
   setupTabs();
-  loadTab("patient");
+  loadTab("patient"); // Default tab
 });
 
 /* ==========================================================
@@ -27,35 +31,45 @@ async function loadPatientHeader() {
     .eq("id", PATIENT_ID)
     .single();
 
-  if (error) return console.error(error);
+  if (error) {
+    console.error("Failed to load patient header:", error);
+    return;
+  }
 
   document.getElementById("patientName").textContent =
     `${data.first_name} ${data.last_name}`;
 }
 
 /* ==========================================================
-   LOAD OR CREATE EPCR
+   LOAD OR CREATE EPCR RECORD
 ========================================================== */
 
 async function loadOrCreateEpcr() {
-  const { data } = await supabase
-    .from("epcr")
+  // Look for existing record
+  const { data, error } = await supabase
+    .from("pcrs")
     .select("*")
     .eq("patient_id", PATIENT_ID)
-    .single();
+    .maybeSingle();
+
+  if (error) console.warn("EPCR lookup error:", error);
 
   if (data) {
     EPCR_ID = data.id;
     return;
   }
 
-  const { data: created, error } = await supabase
-    .from("epcr")
+  // Create one if none exists
+  const { data: created, error: insertErr } = await supabase
+    .from("pcrs")
     .insert({ patient_id: PATIENT_ID })
     .select()
     .single();
 
-  if (error) return console.error(error);
+  if (insertErr) {
+    console.error("Failed to create PCR record:", insertErr);
+    return;
+  }
 
   EPCR_ID = created.id;
 }
@@ -65,9 +79,11 @@ async function loadOrCreateEpcr() {
 ========================================================== */
 
 function setupTabs() {
-  document.querySelectorAll(".tab").forEach((tab) => {
+  const tabs = document.querySelectorAll(".tab");
+
+  tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
-      document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+      tabs.forEach((t) => t.classList.remove("active"));
       tab.classList.add("active");
 
       loadTab(tab.dataset.tab);
@@ -82,17 +98,32 @@ function setupTabs() {
 async function loadTab(tabName) {
   const container = document.getElementById("epcrContent");
 
-  container.innerHTML = `<div class="loading">Loading...</div>`;
+  container.innerHTML = `
+    <div class="loading">
+      <span>Loading ${tabName}...</span>
+    </div>
+  `;
 
   try {
+    // Dynamic import of tab
     const module = await import(`./epcr_tabs/${tabName}.js`);
 
+    // Inject HTML template
     container.innerHTML = module.template;
 
-    await module.load(EPCR_ID);
-    module.enableAutosave(EPCR_ID);
+    // Load PCR data for this tab
+    if (module.load) await module.load(EPCR_ID);
+
+    // Enable autosave if provided
+    if (module.enableAutosave) module.enableAutosave(EPCR_ID);
+
   } catch (err) {
-    console.error(`Failed to load tab: ${tabName}`, err);
-    container.innerHTML = `<div class="error">Failed to load tab.</div>`;
+    console.error(`Failed to load tab '${tabName}'`, err);
+
+    container.innerHTML = `
+      <div class="error">
+        Error: Could not load ${tabName} tab.
+      </div>
+    `;
   }
 }

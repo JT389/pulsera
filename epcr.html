@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Pulsera ePCR</title>
 
-  <link rel="stylesheet" href="css/epcr.css">
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/epcr.css" />
+
+  <!-- Main EPCR Engine -->
   <script type="module" src="js/epcr.js" defer></script>
 </head>
 
@@ -12,7 +15,7 @@
 
 <!-- TOP NAV -->
 <div class="epcr-navbar">
-  <img src="https://i.imgur.com/ogSYUG6.png" class="epcr-logo">
+  <img src="https://i.imgur.com/ogSYUG6.png" class="epcr-logo" />
 
   <div class="epcr-title">
     <span id="patientName">Loading Patient…</span>
@@ -20,8 +23,8 @@
   </div>
 
   <div class="epcr-nav-icons">
-    <img src="icons/help.svg" class="nav-icon">
-    <img src="icons/settings.svg" class="nav-icon">
+    <img src="icons/help.svg" class="nav-icon" />
+    <img src="icons/settings.svg" class="nav-icon" />
     <div class="profile-badge" id="profileBadge">M</div>
   </div>
 </div>
@@ -37,8 +40,10 @@
   <div class="tab" data-tab="signatures">Signatures</div>
 </div>
 
-<!-- MAIN CONTENT (DYNAMICALLY REPLACED BY JS) -->
-<div class="epcr-content" id="epcrContent"></div>
+<!-- MAIN CONTENT (DYNAMICALLY LOADED BY JS) -->
+<div id="epcrContent" class="epcr-content">
+  <!-- JS will inject all tab pages here -->
+</div>
 
 </body>
 </html>
