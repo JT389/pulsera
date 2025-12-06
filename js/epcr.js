@@ -1,34 +1,7 @@
 import { supabase } from "./supabase.js";
 
-/* ==========================================================
-   CONFIG
-========================================================== */
-
+let EPCR_ID = null;
 const PATIENT_ID = localStorage.getItem("currentPatientId");
-let PCR_ID = null;
-
-const autosaveLabel = document.getElementById("autosave");
-
-/* Field mapping between inputs and database columns */
-const FIELD_MAP = {
-  firstName: "first_name",
-  lastName: "last_name",
-  dob: "dob",
-  gender: "gender",
-  chiefComplaint: "chief_complaint",
-  incidentLoc: "incident_location",
-  incidentNature: "incident_nature",
-  assessmentNotes: "assessment",
-  hr: "vital_hr",
-  rr: "vital_rr",
-  bp: "vital_bp",
-  meds: "medications",
-  timeline: "timeline"
-};
-
-/* ==========================================================
-   INITIALIZATION
-========================================================== */
 
 document.addEventListener("DOMContentLoaded", async () => {
   if (!PATIENT_ID) {
@@ -37,127 +10,54 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   await loadPatientHeader();
-  await loadOrCreatePCR();
-  await loadPCRData();
-  prepareAutosave();
+  await loadOrCreateEpcr();
+
   setupTabs();
-  setupSignaturePads();
+  loadTab("patient");
 });
 
 /* ==========================================================
-   LOAD PATIENT NAME FOR HEADER
+   LOAD PATIENT HEADER
 ========================================================== */
 
 async function loadPatientHeader() {
   const { data, error } = await supabase
     .from("patients")
-    .select("*")
+    .select("first_name, last_name")
     .eq("id", PATIENT_ID)
     .single();
 
-  if (error) {
-    console.error("Failed to load patient:", error);
-    return;
-  }
+  if (error) return console.error(error);
 
   document.getElementById("patientName").textContent =
     `${data.first_name} ${data.last_name}`;
 }
 
 /* ==========================================================
-   LOAD OR CREATE PCR RECORD
+   LOAD OR CREATE EPCR
 ========================================================== */
 
-async function loadOrCreatePCR() {
-  const { data, error } = await supabase
-    .from("pcrs")
+async function loadOrCreateEpcr() {
+  const { data } = await supabase
+    .from("epcr")
     .select("*")
     .eq("patient_id", PATIENT_ID)
     .single();
 
   if (data) {
-    PCR_ID = data.id;
+    EPCR_ID = data.id;
     return;
   }
 
-  // Create if none exists
-  const { data: created, error: createErr } = await supabase
-    .from("pcrs")
+  const { data: created, error } = await supabase
+    .from("epcr")
     .insert({ patient_id: PATIENT_ID })
     .select()
     .single();
 
-  if (createErr) {
-    console.error("Failed to create PCR:", createErr);
-    return;
-  }
+  if (error) return console.error(error);
 
-  PCR_ID = created.id;
-}
-
-/* ==========================================================
-   LOAD EXISTING PCR DATA INTO THE FORM
-========================================================== */
-
-async function loadPCRData() {
-  const { data, error } = await supabase
-    .from("pcrs")
-    .select("*")
-    .eq("id", PCR_ID)
-    .single();
-
-  if (error) {
-    console.error("Failed to load PCR:", error);
-    return;
-  }
-
-  // Populate fields
-  for (const [elementId, columnName] of Object.entries(FIELD_MAP)) {
-    const el = document.getElementById(elementId);
-    if (el && data[columnName] !== null) el.value = data[columnName];
-  }
-
-  autosaveLabel.textContent = "Saved";
-}
-
-/* ==========================================================
-   AUTOSAVE ENGINE
-========================================================== */
-
-function prepareAutosave() {
-  for (const elementId of Object.keys(FIELD_MAP)) {
-    const el = document.getElementById(elementId);
-    if (!el) continue;
-
-    el.addEventListener("input", () => queueAutosave(elementId));
-  }
-}
-
-let autosaveTimer = null;
-
-function queueAutosave(elementId) {
-  autosaveLabel.textContent = "Saving…";
-
-  clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(() => saveField(elementId), 500);
-}
-
-async function saveField(elementId) {
-  const column = FIELD_MAP[elementId];
-  const value = document.getElementById(elementId).value;
-
-  const { error } = await supabase
-    .from("pcrs")
-    .update({ [column]: value })
-    .eq("id", PCR_ID);
-
-  if (error) {
-    console.error("Autosave error:", error);
-    autosaveLabel.textContent = "Error";
-    return;
-  }
-
-  autosaveLabel.textContent = "Saved";
+  EPCR_ID = created.id;
 }
 
 /* ==========================================================
@@ -165,81 +65,34 @@ async function saveField(elementId) {
 ========================================================== */
 
 function setupTabs() {
-  const tabs = document.querySelectorAll(".tab");
-  const pages = document.querySelectorAll(".tab-page");
-
-  tabs.forEach((tab) => {
+  document.querySelectorAll(".tab").forEach((tab) => {
     tab.addEventListener("click", () => {
-      const target = tab.dataset.tab;
-
-      tabs.forEach((t) => t.classList.remove("active"));
-      pages.forEach((p) => p.classList.remove("active"));
-
+      document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
       tab.classList.add("active");
-      document.getElementById(`page-${target}`).classList.add("active");
+
+      loadTab(tab.dataset.tab);
     });
   });
 }
 
 /* ==========================================================
-   SIGNATURE PAD HANDLING
+   LOAD A DYNAMIC TAB MODULE
 ========================================================== */
 
-function setupSignaturePads() {
-  setupSignatureCanvas("sigPatient", "sig_patient");
-  setupSignatureCanvas("sigMedic", "sig_medic");
+async function loadTab(tabName) {
+  const container = document.getElementById("epcrContent");
 
-  document.getElementById("clearPatientSig").onclick = () =>
-    clearSignature("sigPatient", "sig_patient");
+  container.innerHTML = `<div class="loading">Loading...</div>`;
 
-  document.getElementById("clearMedicSig").onclick = () =>
-    clearSignature("sigMedic", "sig_medic");
-}
+  try {
+    const module = await import(`./epcr_tabs/${tabName}.js`);
 
-function setupSignatureCanvas(canvasId, column) {
-  const canvas = document.getElementById(canvasId);
-  const ctx = canvas.getContext("2d");
-  let drawing = false;
+    container.innerHTML = module.template;
 
-  canvas.addEventListener("mousedown", () => (drawing = true));
-  canvas.addEventListener("mouseup", async () => {
-    drawing = false;
-    await saveSignature(canvasId, column);
-  });
-
-  canvas.addEventListener("mousemove", (e) => {
-    if (!drawing) return;
-    const rect = canvas.getBoundingClientRect();
-    ctx.fillStyle = "#fff";
-    ctx.beginPath();
-    ctx.arc(e.clientX - rect.left, e.clientY - rect.top, 2, 0, Math.PI * 2);
-    ctx.fill();
-  });
-}
-
-async function saveSignature(canvasId, column) {
-  autosaveLabel.textContent = "Saving…";
-
-  const canvas = document.getElementById(canvasId);
-  const dataURL = canvas.toDataURL();
-
-  const { error } = await supabase
-    .from("pcrs")
-    .update({ [column]: dataURL })
-    .eq("id", PCR_ID);
-
-  if (error) {
-    console.error("Signature save failed:", error);
-    autosaveLabel.textContent = "Error";
-    return;
+    await module.load(EPCR_ID);
+    module.enableAutosave(EPCR_ID);
+  } catch (err) {
+    console.error(`Failed to load tab: ${tabName}`, err);
+    container.innerHTML = `<div class="error">Failed to load tab.</div>`;
   }
-
-  autosaveLabel.textContent = "Saved";
-}
-
-function clearSignature(canvasId, column) {
-  const canvas = document.getElementById(canvasId);
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  saveSignature(canvasId, column);
 }
