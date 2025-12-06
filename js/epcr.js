@@ -1,9 +1,5 @@
 import { supabase } from "./supabase.js";
 
-/* ==========================================================
-   CONFIG / GLOBALS
-========================================================== */
-
 let EPCR_ID = null;
 const PATIENT_ID = localStorage.getItem("currentPatientId");
 
@@ -20,110 +16,83 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadTab("patient"); // Default tab
 });
 
-/* ==========================================================
-   LOAD PATIENT HEADER
-========================================================== */
+/* ============================
+   Load Patient Header
+============================ */
 
 async function loadPatientHeader() {
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("patients")
     .select("first_name, last_name")
     .eq("id", PATIENT_ID)
     .single();
 
-  if (error) {
-    console.error("Failed to load patient header:", error);
-    return;
-  }
-
   document.getElementById("patientName").textContent =
     `${data.first_name} ${data.last_name}`;
 }
 
-/* ==========================================================
-   LOAD OR CREATE EPCR RECORD
-========================================================== */
+/* ============================
+   Load or Create EPCR Record
+============================ */
 
 async function loadOrCreateEpcr() {
-  // Look for existing record
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("pcrs")
     .select("*")
     .eq("patient_id", PATIENT_ID)
     .maybeSingle();
-
-  if (error) console.warn("EPCR lookup error:", error);
 
   if (data) {
     EPCR_ID = data.id;
     return;
   }
 
-  // Create one if none exists
-  const { data: created, error: insertErr } = await supabase
+  const { data: created } = await supabase
     .from("pcrs")
     .insert({ patient_id: PATIENT_ID })
     .select()
     .single();
 
-  if (insertErr) {
-    console.error("Failed to create PCR record:", insertErr);
-    return;
-  }
-
   EPCR_ID = created.id;
+  localStorage.setItem("currentEpcrId", EPCR_ID);
 }
 
-/* ==========================================================
-   TAB SYSTEM
-========================================================== */
+/* ============================
+   Tab System
+============================ */
 
 function setupTabs() {
-  const tabs = document.querySelectorAll(".tab");
-
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      tabs.forEach((t) => t.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(tab => {
+    tab.onclick = () => {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
       tab.classList.add("active");
 
       loadTab(tab.dataset.tab);
-    });
+    };
   });
 }
 
-/* ==========================================================
-   LOAD A DYNAMIC TAB MODULE
-========================================================== */
+/* ============================
+   Load HTML Tab
+============================ */
 
 async function loadTab(tabName) {
   const container = document.getElementById("epcrContent");
 
-  container.innerHTML = `
-    <div class="loading">
-      <span>Loading ${tabName}...</span>
-    </div>
-  `;
+  container.innerHTML = `<div class='loading'>Loading ${tabName}...</div>`;
 
   try {
-    // Dynamic import of tab
-    const module = await import(`./epcr_tabs/${tabName}.js`);
+    const response = await fetch(`epcr_tabs/${tabName}.html`);
+    const html = await response.text();
 
-    // Inject HTML template
-    container.innerHTML = module.template;
+    container.innerHTML = html;
 
-    // Load PCR data for this tab
-    if (module.load) await module.load(EPCR_ID);
+    // Run embedded script tag inside tab HTML
+    const script = container.querySelector("script");
+    if (script) eval(script.innerText);
 
-    // Enable autosave if provided
-    if (module.enableAutosave) module.enableAutosave(EPCR_ID);
-
-  } catch (err) {
-    console.error(`Failed to load tab '${tabName}'`, err);
-
-    container.innerHTML = `
-      <div class="error">
-        Error: Could not load ${tabName} tab.
-      </div>
-    `;
+  } catch (e) {
+    console.error(e);
+    container.innerHTML = `<div class='error'>Failed to load ${tabName} tab.</div>`;
   }
 }
