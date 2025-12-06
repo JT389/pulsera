@@ -1,0 +1,374 @@
+/* =============================================
+   GLOBAL VARIABLES — Pulsara Dark UI
+============================================= */
+
+:root {
+  --bg-dark: #0d1117;
+  --bg-panel: #161b22;
+  --bg-card: #1d232b;
+  --border-soft: #2b313a;
+  --border-hard: #3a414b;
+
+  --text-primary: #e6edf3;
+  --text-secondary: #9ba4b0;
+  --text-muted: #6c7178;
+
+  --pulsera-blue: #2aa7ff;
+  --pulsera-teal: #00c6c2;
+
+  /* Pulsara triage colors */
+  --triage-green: #00c853;
+  --triage-yellow: #ffd600;
+  --triage-red: #ff1744;
+  --triage-black: #000000;
+  --triage-none: #9ba4b0;
+
+  --card-radius: 6px;
+}
+
+/* Remove all margin/padding */
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+  overflow: hidden; /* Pulsara prevents page scroll; internal elements scroll */
+}
+
+/* =============================================
+   TOP NAVBAR (Logo + Search + Icons + Profile)
+============================================= */
+
+.incident-navbar {
+  height: 60px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-hard);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 18px;
+}
+
+.incident-logo {
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Search box */
+.incident-search {
+  background: #0f151c;
+  border: 1px solid var(--border-soft);
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 6px;
+  color: var(--text-primary);
+  flex: 0 0 320px;
+  font-size: 0.95rem;
+}
+
+/* Icon bar */
+.nav-icons {
+  margin-left: auto;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-icon {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.nav-icon:hover {
+  opacity: 1;
+}
+
+/* Profile circle */
+.profile-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--pulsera-teal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-weight: 600;
+}
+
+/* =============================================
+   INCIDENT HEADER BAR
+============================================= */
+
+.incident-header {
+  height: 70px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  justify-content: space-between;
+}
+
+.incident-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.incident-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-right {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+/* Patient Color Counters */
+.color-counter {
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot-green { background: var(--triage-green); }
+.dot-yellow { background: var(--triage-yellow); }
+.dot-red { background: var(--triage-red); }
+.dot-black { background: var(--triage-black); }
+.dot-none { background: var(--triage-none); }
+
+/* =============================================
+   LEFT FILTER SIDEBAR
+============================================= */
+
+.sidebar {
+  width: 260px;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border-hard);
+  height: calc(100vh - 130px); /* minus navbar + header */
+  overflow-y: auto;
+  padding: 10px 0;
+  position: fixed;
+  top: 130px;
+  left: 0;
+}
+
+.sidebar-section-title {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 16px 20px 6px;
+}
+
+.sidebar-option {
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-primary);
+}
+
+.sidebar-option:hover {
+  background: #1f2630;
+}
+
+.sidebar-option.active {
+  background: #212a34;
+  border-left: 3px solid var(--pulsera-teal);
+}
+
+/* =============================================
+   RIGHT CONTENT AREA (patient list)
+============================================= */
+
+.content-area {
+  margin-left: 260px;
+  height: calc(100vh - 130px);
+  overflow-y: auto;
+  padding: 20px 28px;
+}
+
+/* Sort Bar */
+.sort-bar {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 18px;
+}
+
+.sort-option {
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.sort-option.active {
+  color: var(--pulsera-teal);
+  font-weight: 600;
+}
+
+/* Create Patient Button */
+.create-patient-btn {
+  position: absolute;
+  top: 145px;
+  right: 28px;
+  background: var(--pulsera-teal);
+  color: #000;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+/* =============================================
+   PATIENT CARDS (IDENTICAL TO PULSARA)
+============================================= */
+
+.patient-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--card-radius);
+  height: 120px;
+  display: flex;
+  padding: 14px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  position: relative;
+}
+
+.patient-card:hover {
+  background: #202731;
+}
+
+/* Left color bar */
+.patient-color-bar {
+  width: 6px;
+  border-radius: 6px;
+  margin-right: 14px;
+}
+
+.bar-green { background: var(--triage-green); }
+.bar-yellow { background: var(--triage-yellow); }
+.bar-red { background: var(--triage-red); }
+.bar-black { background: var(--triage-black); }
+.bar-none { background: var(--triage-none); }
+
+/* Card content */
+.patient-main {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.patient-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Name */
+.patient-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.patient-meta {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Right-side actions */
+.patient-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.patient-icons {
+  display: flex;
+  gap: 12px;
+  opacity: 0.8;
+}
+
+.patient-icons img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.patient-icons img:hover {
+  opacity: 1;
+}
+
+.patient-timestamps {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Unread dot */
+.unread-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--pulsera-blue);
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  right: 12px;
+}
+
+/* Facility icon (green check) */
+.facility-check {
+  width: 14px;
+  height: 14px;
+  background: var(--pulsera-teal);
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+/* =============================================
+   SCROLLBARS
+============================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f1216;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2b313a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3c4551;
+}

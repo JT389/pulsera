@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pulsera ePCR</title>
+  <link rel="stylesheet" href="css/epcr.css">
+  <script type="module" src="js/epcr.js" defer></script>
+</head>
+
+<body>
+
+<!-- TOP NAV -->
+<div class="epcr-navbar">
+  <img src="https://i.imgur.com/ogSYUG6.png" class="epcr-logo">
+
+  <div class="epcr-title">
+    <span id="patientName">Loading Patient…</span>
+    <span id="autosave">Saved</span>
+  </div>
+
+  <div class="epcr-nav-icons">
+    <img src="icons/help.svg" class="nav-icon">
+    <img src="icons/settings.svg" class="nav-icon">
+    <div class="profile-badge">M</div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="epcr-tabs">
+  <div class="tab active" data-tab="patient">Patient</div>
+  <div class="tab" data-tab="incident">Incident</div>
+  <div class="tab" data-tab="assessment">Assessment</div>
+  <div class="tab" data-tab="vitals">Vitals</div>
+  <div class="tab" data-tab="medications">Medications</div>
+  <div class="tab" data-tab="timeline">Timeline</div>
+  <div class="tab" data-tab="signatures">Signatures</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="epcr-content">
+
+  <!-- ===================== PATIENT TAB ===================== -->
+  <div class="tab-page active" id="page-patient">
+
+    <div class="section-card">
+      <div class="section-title">Demographics</div>
+
+      <label>First Name</label>
+      <input id="firstName">
+
+      <label>Last Name</label>
+      <input id="lastName">
+
+      <label>Date of Birth</label>
+      <input id="dob" type="date">
+
+      <label>Gender</label>
+      <select id="gender">
+        <option value="">Select</option>
+        <option>M</option>
+        <option>F</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">Chief Complaint</div>
+      <textarea id="chiefComplaint"></textarea>
+    </div>
+
+  </div>
+
+  <!-- ===================== INCIDENT TAB ===================== -->
+  <div class="tab-page" id="page-incident">
+    <div class="section-card">
+      <div class="section-title">Incident Details</div>
+      <label>Incident Location</label>
+      <input id="incidentLoc">
+
+      <label>Nature of Call</label>
+      <input id="incidentNature">
+    </div>
+  </div>
+
+  <!-- ===================== ASSESSMENT TAB ===================== -->
+  <div class="tab-page" id="page-assessment">
+    <div class="section-card">
+      <div class="section-title">General Assessment</div>
+      <textarea id="assessmentNotes"></textarea>
+    </div>
+  </div>
+
+  <!-- ===================== VITALS TAB ===================== -->
+  <div class="tab-page" id="page-vitals">
+    <div class="section-card">
+      <div class="section-title">Vitals</div>
+
+      <label>Heart Rate</label>
+      <input id="hr" type="number">
+
+      <label>Respirations</label>
+      <input id="rr" type="number">
+
+      <label>Blood Pressure</label>
+      <input id="bp">
+    </div>
+  </div>
+
+  <!-- ===================== MEDICATIONS TAB ===================== -->
+  <div class="tab-page" id="page-medications">
+    <div class="section-card">
+      <div class="section-title">Medications Given</div>
+      <textarea id="meds"></textarea>
+    </div>
+  </div>
+
+  <!-- ===================== TIMELINE TAB ===================== -->
+  <div class="tab-page" id="page-timeline">
+    <div class="section-card">
+      <div class="section-title">Timeline Events</div>
+      <textarea id="timeline"></textarea>
+    </div>
+  </div>
+
+  <!-- ===================== SIGNATURES TAB ===================== -->
+  <div class="tab-page" id="page-signatures">
+    <div class="section-card">
+      <div class="section-title">Patient Signature</div>
+      <canvas id="sigPatient" class="sig-box"></canvas>
+      <button id="clearPatientSig">Clear</button>
+    </div>
+
+    <div class="section-card">
+      <div class="section-title">Provider Signature</div>
+      <canvas id="sigMedic" class="sig-box"></canvas>
+      <button id="clearMedicSig">Clear</button>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,214 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: #0f0f0f;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+}
+
+.incident-navbar {
+    height: 60px;
+    background: #111;
+    border-bottom: 1px solid #222;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.incident-logo {
+    height: 42px;
+}
+
+.incident-search {
+    margin-left: 20px;
+    width: 300px;
+    background: #1d1d1d;
+    border: 1px solid #333;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: #fff;
+}
+
+.nav-icons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-icon {
+    width: 22px;
+    filter: invert(1);
+}
+
+.profile-badge {
+    background: #1f7cff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* HEADER */
+
+.incident-header {
+    padding: 20px 260px 20px 260px; /* shifted right for sidebar */
+    background: #111;
+    border-bottom: 1px solid #222;
+    display: flex;
+    justify-content: space-between;
+}
+
+.incident-title {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.color-counter {
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+}
+
+.color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 6px;
+}
+
+/* COLOR DOTS */
+
+.dot-green { background: #00c853; }
+.dot-yellow { background: #ffd600; }
+.dot-red { background: #ff5252; }
+.dot-black { background: #555; }
+.dot-none { background: #aaa; }
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 220px;
+    background: #0d0d0d;
+    position: fixed;
+    top: 120px;
+    bottom: 0;
+    left: 0;
+    border-right: 1px solid #222;
+    padding: 15px;
+}
+
+.sidebar-section-title {
+    font-size: 14px;
+    color: #999;
+    margin-top: 20px;
+    margin-bottom: 6px;
+}
+
+.sidebar-option {
+    padding: 8px 4px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.sidebar-option:hover {
+    background: #1b1b1b;
+}
+
+/* CONTENT AREA */
+
+.content-area {
+    margin-left: 260px;
+    padding: 20px;
+}
+
+/* SORT BAR */
+
+.sort-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.sort-option {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.sort-option.active {
+    border-color: #1f7cff;
+    background: #1f7cff22;
+    color: #1f7cff;
+}
+
+/* PATIENT CARDS */
+
+.patient-card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 90px;
+    gap: 10px;
+    transition: 0.2s;
+}
+
+.patient-card.flash {
+    background: #1f7cff33;
+    transform: scale(1.01);
+}
+
+.patient-tag {
+    padding: 3px 10px;
+    border-radius: 4px;
+    width: fit-content;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.tag-green { background: #00c85322; color: #00c853; }
+.tag-yellow { background: #ffd60022; color: #ffd600; }
+.tag-red { background: #ff525222; color: #ff5252; }
+.tag-black { background: #55555522; color: #aaa; }
+.tag-none { background: #aaa3; color: #ccc; }
+
+.patient-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.card-btn {
+    background: #1d1d1d;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 6px;
+    padding: 6px;
+    cursor: pointer;
+}
+
+.card-btn:hover {
+    background: #333;
+}
+
+/* CREATE BUTTON */
+
+.create-patient-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    background: #1f7cff;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pulsera Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/dashboard.js" defer></script>
+</head>
+
+<body class="app-body">
+
+<header class="pulsera-header">
+  <img src="https://i.imgur.com/ogSYUG6.png" class="incident-logo">
+  <div>
+    <span id="user-name"></span>
+    <button id="logout-btn" class="pulsera-btn">Logout</button>
+  </div>
+</header>
+
+<div class="pulsera-container">
+  <div class="unit-card">
+    <h2>Your Unit</h2>
+    <p id="unit"></p>
+  </div>
+
+  <button id="openIncident" class="pulsera-btn-full">Open Active Incident</button>
+
+  <h2>Your Recent PCRs</h2>
+  <div id="pcrList" class="pcr-list"></div>
+</div>
+
+<script type="module">
+  document.getElementById("openIncident").onclick = () =>
+    window.location.href = "incident.html";
+</script>
+
+</body>
+</html>

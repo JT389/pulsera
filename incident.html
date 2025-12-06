@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pulsera Incident</title>
+  <link rel="stylesheet" href="css/incident.css">
+  <script type="module" src="js/incident.js" defer></script>
+</head>
+
+<body>
+
+<div class="incident-navbar">
+  <img src="https://i.imgur.com/ogSYUG6.png" class="incident-logo">
+  <input class="incident-search" id="searchInput" placeholder="Search">
+
+  <div class="nav-icons">
+    <img src="icons/help.svg" class="nav-icon">
+    <img src="icons/settings.svg" class="nav-icon">
+    <div class="profile-badge">M</div>
+  </div>
+</div>
+
+<div class="incident-header">
+  <div>
+    <div class="incident-title" id="incidentName">Loading incident…</div>
+    <div class="incident-subtitle" id="incidentAgency">Loading agency…</div>
+  </div>
+
+  <div class="header-right">
+    <div class="color-counter"><div class="color-dot dot-green"></div><span id="countGreen">0</span></div>
+    <div class="color-counter"><div class="color-dot dot-yellow"></div><span id="countYellow">0</span></div>
+    <div class="color-counter"><div class="color-dot dot-red"></div><span id="countRed">0</span></div>
+    <div class="color-counter"><div class="color-dot dot-black"></div><span id="countBlack">0</span></div>
+    <div class="color-counter"><div class="color-dot dot-none"></div><span id="countNone">0</span></div>
+  </div>
+</div>
+
+<div class="sidebar">
+  <div class="sidebar-section-title">CONDITION</div>
+  <div class="sidebar-option" data-filter="on_scene">On Scene</div>
+  <div class="sidebar-option" data-filter="en_route">En Route</div>
+  <div class="sidebar-option" data-filter="at_destination">At Destination</div>
+
+  <div class="sidebar-section-title">STATUS</div>
+  <div class="sidebar-option" data-color="green">Green</div>
+  <div class="sidebar-option" data-color="yellow">Yellow</div>
+  <div class="sidebar-option" data-color="red">Red</div>
+  <div class="sidebar-option" data-color="black">Black</div>
+  <div class="sidebar-option" data-color="none">None</div>
+</div>
+
+<div class="content-area">
+  <div class="sort-bar">
+    <span class="sort-option active" data-sort="newest">Newest</span>
+    <span class="sort-option" data-sort="eta">ETA</span>
+    <span class="sort-option" data-sort="type">Type</span>
+  </div>
+
+  <div id="patientList"></div>
+</div>
+
+<button class="create-patient-btn" id="createPatientBtn">+ Create Patient</button>
+
+</body>
+</html>
